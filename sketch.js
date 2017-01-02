@@ -1,16 +1,28 @@
 var size_bubble, pos_bubble, vel_bubble, color_bubble, gravity, force, player;
 var bubbles = [];
 var ropes = [];
-var nb_bubbles = 3;
-var max_ropes = 3;
+var nb_bubbles = 0;
+var max_ropes = 0;
+var level = 0;
+var dead;
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(1200, 800);
     frameRate(60);
-
+    
+    if(dead) {
+        level = 0;
+    }
+    
+    dead = false;
     bubbles = [];
     ropes = [];
     gravity = 0.125;
+    
+    level += 1;
+    nb_bubbles = level + 1;
+    max_ropes = floor(level / 2) + 1;
+
     
     for (var i = 0; i < nb_bubbles; i++) {
         bubbles.push(new Bubble());
@@ -51,6 +63,7 @@ function draw() { //draw is called every frame
             var Delta = DeltaX * DeltaX + DeltaY * DeltaY;
             var test = (bubbles[i].size / 2) * (bubbles[i].size / 2)
             if (Delta <= test) {
+                dead = true;
                 setup();
             }
         }
@@ -76,11 +89,12 @@ function draw() { //draw is called every frame
             }
         }
     }
+    if(bubbles.length == 0){setup()}
 }
 
 
 
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
+//function windowResized() {
+//  resizeCanvas(windowWidth, windowHeight);
+//}

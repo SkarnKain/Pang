@@ -5,8 +5,8 @@ function Player(pos) {
   } else {
   this.pos = createVector(width / 2, height);
   }
-  this.h = 150;
-  this.w = 70;
+  this.h = 120;
+  this.w = 50;
   this.vel = createVector(0, 0);
   this.color = 10;
 
