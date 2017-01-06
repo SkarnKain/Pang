@@ -4,23 +4,22 @@ function Rope(xpos, yvel) {
     var x_start = xpos;
     var y_start = height - bord_size - hud_size;
     this.pos_start = createVector(x_start, y_start);
-    this.pos_end = createVector(x_start, y_start);
+    this.pos_end = createVector(x_start, y_start - img_point.height);
     this.update = function () {
         this.pos_end.add(this.vel);
     }
     this.render = function () {
-        push();
-        colorMode(HSB);
-        stroke(this.color, 100, 100);
-        strokeWeight(4);
-        //line(this.pos_start.x, this.pos_start.y, this.pos_end.x, this.pos_end.y);
-        //console.log(this.pos_start.y, this.pos_end.y);
-        for (var i = this.pos_start.y; i >= this.pos_end.y; i--) {
-            /////////
+        image(img_point, this.pos_end.x, this.pos_end.y + img_point.height / 2, img_point.width, img_point.height);
+        for (var i = this.pos_start.y; i >= this.pos_end.y + img_point.height; i--) {
             temp_image = img_rope[i % img_rope.length];
             image(temp_image, this.pos_start.x, i, temp_image.width, temp_image.height);
         }
-        pop();
+//        push();
+//        colorMode(HSB);
+//        stroke(this.color, 100, 100);
+//        strokeWeight(1);
+//        line(this.pos_start.x, this.pos_start.y, this.pos_end.x, this.pos_end.y); //HITBOX
+//        pop();
     }
     this.hits = function (bubble) {
         if (bubble.pos.y > this.pos_end.y) {
