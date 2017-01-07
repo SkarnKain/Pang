@@ -2,9 +2,18 @@ function Bonus(pos, type, FC_beginning) {
     this.pos = pos.copy();
     this.vel = createVector(0, -5);
     this.type = type;
+    if (this.type == "minus_one") {
+        this.mod_ropes = -1;
+    }
+    else if (this.type == "plus_one") {
+        this.mod_ropes = 1;
+    }
+    else {
+        this.mod_ropes = 0;
+    }
     this.size = 25;
-    this.FC_beginning = FC_beginning;
     this.timing = 600;
+    this.FC_beginning = FC_beginning;
     this.FC_ending = this.FC_beginning + this.timing;
     this.update = function () {
         this.vel.x += force.x;
@@ -24,14 +33,21 @@ function Bonus(pos, type, FC_beginning) {
         push();
         var time_left = this.FC_ending - frameCount;
         ratio = map(time_left, 0, this.timing, 0, 1)
-        if (this.type == 1) {
+        if (this.type == "plus_one") {
             tint(255, 255 * ratio);
             image(img_bonus_plus_1, this.pos.x, this.pos.y, this.size, this.size);
         }
-        else {
+        else if (this.type == "minus_one"){
             tint(255, 255 * ratio);
             image(img_bonus_minus_1, this.pos.x, this.pos.y, this.size, this.size);
         }
+        else if (this.type == "shield"){
+            tint(255, 255 * ratio);
+            image(img_bonus_shield, this.pos.x, this.pos.y, this.size, this.size);
+        }
+        
+        
+        
         pop();
         //noFill();
         //rect(this.pos.x, this.pos.y, this.size, this.size); //HITBOX

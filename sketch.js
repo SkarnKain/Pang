@@ -12,12 +12,15 @@ var bonus_SP;
 //var img_bubble_blue;
 var img_bubbles = [];
 var img_BG;
-var img_player;
+var cur_img_player;
 var img_point;
 var img_bonus_plus_1;
 var img_bonus_minus_1;
+var img_bonus_shield;
 var img_lives;
+var img_shield;
 var img_rope = [];
+var img_player = [];
 var bord_size = 25;
 var hud_size = 125;
 var checkbox_hitbox;
@@ -28,16 +31,21 @@ var lives = 3;
 var score = 0;
 var bestscore = 0;
 var bonus_lives = [[5000, false], [10000, false], [20000, false]];
+var shield_on = false;
+var metal_ropes_on = false;
 
 function preload() {
     img_BG = loadImage("images/TajMahal.png");
-    //    img_bubble_red = loadImage("images/bubble_red.png");
-    //    img_bubble_blue = loadImage("images/bubble_blue.png");
-    img_player = loadImage("images/player.png");
+    for (var i = 0; i < 5; i++) {
+        img_player[i] = loadImage("images/player" + i + ".png");
+    }
+    cur_img_player = img_player[0];
     img_point = loadImage("images/point.png");
     img_bonus_plus_1 = loadImage("images/bonus_plus_1.png");
     img_bonus_minus_1 = loadImage("images/bonus_minus_1.png");
+    img_bonus_shield = loadImage("images/bonus_shield.png");
     img_lives = loadImage("images/lives.png");
+    img_shield = loadImage("images/shield.png");
     for (var i = 0; i < 5; i++) {
         img_bubbles[i] = loadImage("images/bubble" + i + ".png");
     }
@@ -84,12 +92,20 @@ function draw() {
     //rect(width / 2, height / 2 - hud_size / 2, width - 2 * bord_size, height - 2 * bord_size - hud_size); //HIT BOX
     force = createVector(0, gravity);
     max_ropes = 1;
+    shield_on = false;
+    metal_ropes_on = false;
     for (var i = bonuss_taken.length - 1; i >= 0; i--) {
         if (frameCount >= bonuss_taken[i].FC_ending) {
             bonuss_taken.splice(i, 1);
             break;
         }
-        max_ropes += bonuss_taken[i].type;
+        max_ropes += bonuss_taken[i].mod_ropes;
+        if (bonuss_taken[i].type == "shield") {
+            shield_on = true;
+        }
+        if (bonuss_taken[i].type == "metal_ropes") {
+            metal_ropes_on = true;
+        }
     }
     //
     for (var i = 0; i < bubbles.length; i++) {
@@ -107,7 +123,7 @@ function draw() {
             var DeltaY = bubbles[i].pos.y - max(player.pos.y - player.h, min(bubbles[i].pos.y, player.pos.y));
             var Delta = DeltaX * DeltaX + DeltaY * DeltaY;
             var test = (bubbles[i].size / 2) * (bubbles[i].size / 2)
-            if (Delta <= test) {
+            if (Delta <= test && !shield_on) {
                 dead = true;
                 lives -= 1;
                 setup();
@@ -135,7 +151,7 @@ function draw() {
             test_x = true;
         }
         if (test_y && test_x) {
-            bonuss_taken.push(new Bonus_taken(bonuss[i].type, frameCount));
+            bonuss_taken.push(new Bonus_taken(bonuss[i].type, bonuss[i].mod_ropes, frameCount));
             bonuss.splice(i, 1);
         }
         // TEST COLLISION BONUS-PLAYER - END
@@ -156,14 +172,7 @@ function draw() {
                     var temp_vel_b2 = createVector(bubbles[j].vel.x * -1.05, -5);
                     bubbles.push(new Bubble(bubbles[j].size / 2, bubbles[j].pos, temp_vel_b1, bubbles[j].color));
                     bubbles.push(new Bubble(bubbles[j].size / 2, bubbles[j].pos, temp_vel_b2, bubbles[j].color));
-                    if (random(0, 100) < bonus_SP && bonuss.length + bonuss_taken.length < 3) {
-                        if (random(0, 100) < 50) {
-                            bonuss.push(new Bonus(bubbles[j].pos, 1, frameCount));
-                        }
-                        else {
-                            bonuss.push(new Bonus(bubbles[j].pos, -1, frameCount));
-                        }
-                    }
+                    pushbonus(j);
                     bubbles.splice(j, 1);
                     ropes.splice(i, 1);
                     score += 100;
@@ -185,6 +194,22 @@ function draw() {
         if (score >= bonus_lives[i][0] && !bonus_lives[i][1]) {
             lives += 1;
             bonus_lives[i][1] = true;
+        }
+    }
+}
+
+function pushbonus(j) {
+    var rand_spawn = random(0, 100);
+    var rand_type = random(0, 100);
+    if (rand_spawn < bonus_SP && bonuss.length + bonuss_taken.length < 3) {
+        if (rand_type >= 50) {
+            bonuss.push(new Bonus(bubbles[j].pos, "plus_one", frameCount));
+        }
+        else if (rand_type < 50 && rand_type >= 25) {
+            bonuss.push(new Bonus(bubbles[j].pos, "minus_one", frameCount));
+        }
+        else if (rand_type < 25) {
+            bonuss.push(new Bonus(bubbles[j].pos, "shield", frameCount));
         }
     }
 }

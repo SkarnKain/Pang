@@ -11,13 +11,17 @@ function Hud_draw() {
         stroke(255);
         rect(75, height - scl_hud * (4.7 - i * 1.5), 300, scl_hud);
         noStroke();
-        if (bonuss_taken[i].type == -1) {
+        if (bonuss_taken[i].type == "minus_one") {
             fill(255, 0, 0);
             image(img_bonus_minus_1, 25, height - scl_hud * (4.7 - i * 1.5), scl_hud, scl_hud);
         }
-        else {
+        else if (bonuss_taken[i].type == "plus_one") {
             fill(0, 255, 0);
             image(img_bonus_plus_1, 25, height - scl_hud * (4.7 - i * 1.5), scl_hud, scl_hud);
+        }
+        else if (bonuss_taken[i].type == "shield") {
+            fill(44, 180, 160);
+            image(img_bonus_shield, 25, height - scl_hud * (4.7 - i * 1.5), scl_hud, scl_hud);
         }
         rect(75, height - scl_hud * (4.7 - i * 1.5), 300 * ratio, scl_hud);
         pop();

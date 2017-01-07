@@ -1,10 +1,19 @@
-function Rope(xpos, yvel) {
+function Rope(xpos, yvel, FC_beginning, type) {
     this.vel = createVector(0, yvel);
     this.color = floor(random(0, 10));
     var x_start = xpos;
     var y_start = height - bord_size - hud_size;
     this.pos_start = createVector(x_start, y_start);
     this.pos_end = createVector(x_start, y_start - img_point.height);
+    this.type = type;
+    if (this.type = "classic") {
+        this.timing = 0;
+    }
+    else if (this.type = "metal") {
+        this.timing = 300;
+    }
+    this.FC_beginning = FC_beginning;
+    this.FC_ending = this.FC_beginning + this.timing;
     this.update = function () {
         this.pos_end.add(this.vel);
     }
@@ -14,12 +23,12 @@ function Rope(xpos, yvel) {
             temp_image = img_rope[i % img_rope.length];
             image(temp_image, this.pos_start.x, i, temp_image.width, temp_image.height);
         }
-//        push();
-//        colorMode(HSB);
-//        stroke(this.color, 100, 100);
-//        strokeWeight(1);
-//        line(this.pos_start.x, this.pos_start.y, this.pos_end.x, this.pos_end.y); //HITBOX
-//        pop();
+        //        push();
+        //        colorMode(HSB);
+        //        stroke(this.color, 100, 100);
+        //        strokeWeight(1);
+        //        line(this.pos_start.x, this.pos_start.y, this.pos_end.x, this.pos_end.y); //HITBOX
+        //        pop();
     }
     this.hits = function (bubble) {
         if (bubble.pos.y > this.pos_end.y) {
