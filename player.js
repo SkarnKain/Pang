@@ -9,6 +9,7 @@ function Player(pos) {
         this.vel = createVector(0, 0);
         this.color = 10;
         this.isshooting = false;
+        this.bullet_shooting = false;
         this.shoot_time_end = 0;
     }
     this.update = function () {
@@ -33,7 +34,7 @@ function Player(pos) {
         }
     }
     this.render = function () {
-        if (this.isshooting) {
+        if (this.isshooting || this.bullet_shooting) {
             cur_img_player = img_player[4];
         }
         else if (this.vel.x >= 0 && this.vel.x < 1) {

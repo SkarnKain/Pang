@@ -23,6 +23,14 @@ function Hud_draw() {
             fill(44, 180, 160);
             image(img_bonus_shield, 25, height - scl_hud * (4.7 - i * 1.5), scl_hud, scl_hud);
         }
+        else if (bonuss_taken[i].type == "metal_ropes") {
+            fill(115, 136, 140);
+            image(img_bonus_metal_ropes, 25, height - scl_hud * (4.7 - i * 1.5), scl_hud, scl_hud);
+        }
+        else if (bonuss_taken[i].type == "bullets") {
+            fill(253, 207, 0);
+            image(img_bonus_bullets, 25, height - scl_hud * (4.7 - i * 1.5), scl_hud, scl_hud);
+        }
         rect(75, height - scl_hud * (4.7 - i * 1.5), 300 * ratio, scl_hud);
         pop();
         //
