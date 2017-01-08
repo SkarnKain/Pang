@@ -50,19 +50,17 @@ function Player(pos) {
             cur_img_player = img_player[3];
         }
         image(cur_img_player, this.pos.x, this.pos.y - this.h * 1.1 / 2, this.w * 3, this.h * 1.1);
-//        push();
-//        noFill();
-//        stroke(this.color);
-//        rect(this.pos.x, this.pos.y - this.h / 2, this.w, this.h); //HIT BOX
-//        pop();
-        if(shield_on){
+        //        push();
+        //        noFill();
+        //        stroke(this.color);
+        //        rect(this.pos.x, this.pos.y - this.h / 2, this.w, this.h); //HIT BOX
+        //        pop();
+        if (shield_on) {
             push();
             tint(255, 130);
             image(img_shield, this.pos.x, this.pos.y - this.h * 1.1 / 2, this.w * 5, this.h * 1.2);
             pop();
         }
-        
-        
     }
     this.edges = function () {
         if (this.pos.x + this.w / 2 + bord_size > width) {

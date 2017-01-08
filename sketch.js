@@ -8,10 +8,11 @@ var explosions = [];
 var nb_bubbles = 0;
 var max_ropes = 0;
 var level = 0;
-var dead;
+var dead = true;
 var bonus_SP;
 var img_bubbles = [];
-var img_BG;
+var img_BG = [];
+var BG;
 var cur_img_player;
 var img_point;
 var img_bonus_plus_1;
@@ -21,27 +22,39 @@ var img_bonus_metal_ropes;
 var img_bonus_bullets;
 var img_lives;
 var img_shield;
-var img_explosion;
 var img_rope = [];
 var img_bullet;
 var img_metal_rope = [];
 var img_player = [];
+var img_explosion = [];
+var sound_blop;
+var sound_whip;
+var sound_ting;
+var sound_dying;
+var sound_minigun_begin;
+var sound_minigun;
+var sound_minigun_end;
 var bord_size = 25;
 var hud_size = 125;
 var checkbox_hitbox;
 var checkbox_img;
 var starting_FC;
 var starting_delay;
-var lives = 3;
+var lives = 0;
 var score = 0;
 var bestscore = 0;
 var bonus_lives = [[5000, false], [10000, false], [20000, false]];
 var shield_on = false;
 var metal_ropes_on = false;
 var bullets_on = false;
+var minigun_beginning = false;
+var minigun_beginning_timing = 0;
+var minigun_timing = 0;
+var minigun_ending = false;
 
 function preload() {
-    img_BG = loadImage("images/TajMahal.png");
+    img_BG[0] = loadImage("images/TajMahal.png");
+    img_BG[1] = loadImage("images/London.png");
     for (var i = 0; i < 5; i++) {
         img_player[i] = loadImage("images/player" + i + ".png");
     }
@@ -55,7 +68,6 @@ function preload() {
     img_bonus_metal_ropes = loadImage("images/bonus_metal_ropes.png");
     img_bullet = loadImage("images/bullet.png");
     img_bonus_bullets = loadImage("images/bonus_bullets.png");
-    img_explosion = loadImage("images/explosion.png");
     for (var i = 0; i < 5; i++) {
         img_bubbles[i] = loadImage("images/bubble" + i + ".png");
     }
@@ -65,18 +77,29 @@ function preload() {
     for (var i = 0; i < 4; i++) {
         img_metal_rope[i] = loadImage("images/metal_rope" + i + ".png");
     }
+    for (var i = 0; i < 5; i++) {
+        img_explosion[i] = loadImage("images/explosion" + i + ".png");
+    }
+    sound_blop = loadSound('sounds/blop.mp3');
+    sound_whip = loadSound('sounds/whip.mp3');
+    sound_ting = loadSound('sounds/ting.mp3');
+    sound_dying = loadSound('sounds/dying.mp3');
+    sound_minigun_begin = loadSound('sounds/minigun_begin.wav');
+    sound_minigun = loadSound('sounds/minigun.wav');
+    sound_minigun_end = loadSound('sounds/minigun_end.wav');
 }
 
 function setup() {
     starting_FC = frameCount;
     starting_delay = 120;
     gravity = 0.125;
-    bonus_SP = 100;
+    bonus_SP = 25;
     createCanvas(1200, 750);
     //frameRate(20);
     imageMode(CENTER);
     rectMode(CENTER);
     if (dead && lives <= 0) {
+        BG = floor(random(0, img_BG.length));
         level = 1;
         lives = 3;
         score = 0;
@@ -101,7 +124,7 @@ function setup() {
 
 function draw() {
     background(200, 200, 200);
-    image(img_BG, width / 2, height / 2, width, height);
+    image(img_BG[BG], width / 2, height / 2, width, height);
     Hud_draw();
     //rect(width / 2, height / 2 - hud_size / 2, width - 2 * bord_size, height - 2 * bord_size - hud_size); //HIT BOX
     force = createVector(0, gravity);
@@ -126,7 +149,6 @@ function draw() {
         }
     }
     for (var i = explosions.length - 1; i >= 0; i--) {
-        explosions[i].update();
         explosions[i].render();
         if (frameCount >= explosions[i].FC_ending) {
             explosions.splice(i, 1);
@@ -149,6 +171,7 @@ function draw() {
             var Delta = DeltaX * DeltaX + DeltaY * DeltaY;
             var test = (bubbles[i].size / 2) * (bubbles[i].size / 2)
             if (Delta <= test && !shield_on) {
+                sound_dying.play();
                 dead = true;
                 lives -= 1;
                 setup();
@@ -176,6 +199,7 @@ function draw() {
             test_x = true;
         }
         if (test_y && test_x) {
+            sound_ting.play();
             bonuss_taken.push(new Bonus_taken(bonuss[i].type, bonuss[i].mod_ropes, frameCount));
             bonuss.splice(i, 1);
         }
@@ -199,6 +223,7 @@ function draw() {
                     bubbles.push(new Bubble(bubbles[j].size / 2, bubbles[j].pos, temp_vel_b2, bubbles[j].color));
                     pushbonus(j);
                     explosions.push(new Explosion(bubbles[j].size, bubbles[j].pos, frameCount));
+                    sound_blop.play();
                     bubbles.splice(j, 1);
                     if (!metal_ropes_on) {
                         ropes.splice(i, 1);
@@ -228,6 +253,7 @@ function draw() {
                     bubbles.push(new Bubble(bubbles[j].size / 2, bubbles[j].pos, temp_vel_b2, bubbles[j].color));
                     pushbonus(j);
                     explosions.push(new Explosion(bubbles[j].size, bubbles[j].pos, frameCount));
+                    sound_blop.play();
                     bubbles.splice(j, 1);
                     bullets.splice(i, 1);
                     score += 100;

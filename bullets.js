@@ -10,11 +10,11 @@ function Bullet(xpos) {
     }
     this.render = function () {
         image(img_bullet, this.pos_end.x, this.pos_end.y + img_point.height / 2, img_point.width, img_point.height);
-//        push();
-//        stroke(255, 0, 0);
-//        strokeWeight(1);
-//        line(this.pos_start.x, this.pos_start.y, this.pos_end.x, this.pos_end.y); //HITBOX
-//        pop();
+        //        push();
+        //        stroke(255, 0, 0);
+        //        strokeWeight(1);
+        //        line(this.pos_start.x, this.pos_start.y, this.pos_end.x, this.pos_end.y); //HITBOX
+        //        pop();
     }
     this.hits = function (bubble) {
         var d = sqrt(sq(this.pos_end.x - bubble.pos.x) + sq(this.pos_end.y - bubble.pos.y));
