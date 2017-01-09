@@ -38,7 +38,7 @@ function Hud_draw() {
     for (var i = 1; i <= lives; i++) {
         push();
         imageMode(CORNER);
-        image(img_lives, width - scl_hud * i * 1.2 - scl_hud / 1.2, height - scl_hud * 4.5, scl_hud, scl_hud);
+        image(img_lives, width - scl_hud * i * 2 - scl_hud / 2, height - scl_hud * 4.5, scl_hud * 1.5, scl_hud * 1.5);
         pop();
         //
     }
@@ -51,7 +51,7 @@ function Hud_draw() {
         bestscore = score;
     }
     text("Best : " + bestscore, width - scl_hud, height - 2 * scl_hud);
-    fill(160, 160, 160);
+    fill(160, 160, 160, 150);
     textSize(40);
     textAlign(CENTER);
     textStyle(BOLD);

@@ -51,11 +51,42 @@ function Bubble(size, pos, vel, color) {
             }
         }
     }
+    this.hits_pl = function (platform) {
+        if (this.pos.x + this.size / 2 >= platform.pos.x - platform.w / 2 && this.pos.x - this.size / 2 <= platform.pos.x + platform.w / 2) {
+            if (this.pos.y + this.size / 2 >= platform.pos.y - platform.h / 2 && this.pos.y - this.size / 2 <= platform.pos.y + platform.h / 2) {
+                this.vel.y *= -1;
+                var new_x = this.pos.x + this.vel.x;
+                var new_y = this.pos.y + this.vel.y;
+                if (new_x + this.size / 2 >= platform.pos.x - platform.w / 2 && new_x - this.size / 2 <= platform.pos.x + platform.w / 2) {
+                    if (new_y + this.size / 2 >= platform.pos.y - platform.h / 2 && new_y - this.size / 2 <= platform.pos.y + platform.h / 2) {
+                        this.vel.y *= -1;
+                        this.vel.x *= -1;
+                    }
+                }
+            }
+        }
+    }
     this.render = function () {
         push();
         image(img_bubbles[this.color], this.pos.x, this.pos.y, this.size, this.size);
         //noFill();
         //ellipse(this.pos.x, this.pos.y, this.size);//HIT BOX
         pop();
+    }
+    this.hits = function (player) {
+        var DeltaX = this.pos.x - max(player.pos.x - player.w / 2, min(this.pos.x, player.pos.x + player.w / 2));
+        var DeltaY = this.pos.y - max(player.pos.y - player.h, min(this.pos.y, player.pos.y));
+        var Delta = DeltaX * DeltaX + DeltaY * DeltaY;
+        var test = (this.size / 2) * (this.size / 2)
+        if (Delta <= test && !shield_on) {
+            sound_dying.play();
+            dead = true;
+            lives -= 1;
+            if (lives <= 0) {
+                gameover = true;
+                gameover_begin = true;
+            }
+            setup();
+        }
     }
 }

@@ -15,7 +15,7 @@ function mouseClicked() {
 function is_mouse_pressed() {
     if (bullets_on && mouseIsPressed) {
         if (minigun_beginning == false) {
-            sound_minigun_begin.setVolume(0.4);
+            sound_minigun_begin.setVolume(0.3);
             sound_minigun_begin.play();
             minigun_beginning = true;
             minigun_beginning_timing = frameCount + 30;
@@ -24,7 +24,7 @@ function is_mouse_pressed() {
             if (frameCount > minigun_timing) {
                 bullets.push(new Bullet(player.pos.x));
                 bullets.push(new Bullet(player.pos.x));
-                sound_minigun.setVolume(0.4);
+                sound_minigun.setVolume(0.3);
                 sound_minigun.play();
                 minigun_timing = frameCount + 3;
             }
