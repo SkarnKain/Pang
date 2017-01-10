@@ -4,6 +4,7 @@ function Bubble(size, pos, vel, color) {
         this.pos = pos.copy();
         this.vel = vel.copy();
         this.color = color;
+        this.angle = random(0, TWO_PI);
     }
     else {
         var x = random([0, width]);
@@ -18,6 +19,7 @@ function Bubble(size, pos, vel, color) {
         }
         this.vel = createVector(temp_vel, 0);
         this.color = floor(random(0, 5));
+        this.angle = random(0, TWO_PI);
     }
     this.update = function () {
         this.vel.x += force.x;
@@ -55,10 +57,10 @@ function Bubble(size, pos, vel, color) {
         if (this.pos.x + this.size / 2 >= platform.pos.x - platform.w / 2 && this.pos.x - this.size / 2 <= platform.pos.x + platform.w / 2) {
             if (this.pos.y + this.size / 2 >= platform.pos.y - platform.h / 2 && this.pos.y - this.size / 2 <= platform.pos.y + platform.h / 2) {
                 this.vel.y *= -1;
-                var new_x = this.pos.x + this.vel.x;
-                var new_y = this.pos.y + this.vel.y;
-                if (new_x + this.size / 2 >= platform.pos.x - platform.w / 2 && new_x - this.size / 2 <= platform.pos.x + platform.w / 2) {
-                    if (new_y + this.size / 2 >= platform.pos.y - platform.h / 2 && new_y - this.size / 2 <= platform.pos.y + platform.h / 2) {
+                var fut_x = this.pos.x + this.vel.x;
+                var fut_y = this.pos.y + this.vel.y;
+                if (fut_x + this.size / 2 >= platform.pos.x - platform.w / 2 && fut_x - this.size / 2 <= platform.pos.x + platform.w / 2) {
+                    if (fut_y + this.size / 2 >= platform.pos.y - platform.h / 2 && fut_y - this.size / 2 <= platform.pos.y + platform.h / 2) {
                         this.vel.y *= -1;
                         this.vel.x *= -1;
                     }
@@ -68,7 +70,12 @@ function Bubble(size, pos, vel, color) {
     }
     this.render = function () {
         push();
-        image(img_bubbles[this.color], this.pos.x, this.pos.y, this.size, this.size);
+        translate(this.pos.x, this.pos.y);
+        if (frameCount > starting_FC + starting_delay) {
+            this.angle += this.vel.x * 0.005;
+        }
+        rotate(this.angle);
+        image(img_bubbles[this.color], 0, 0, this.size, this.size);
         //noFill();
         //ellipse(this.pos.x, this.pos.y, this.size);//HIT BOX
         pop();

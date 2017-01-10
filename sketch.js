@@ -10,6 +10,7 @@ var nb_bubbles = 0;
 var nb_platforms = 0;
 var max_ropes = 0;
 var level = 0;
+var levels = [];
 var dead = true;
 var bonus_SP;
 var img_bubbles = [];
@@ -30,6 +31,10 @@ var img_metal_rope = [];
 var img_player_R = [];
 var img_player_L = [];
 var img_explosion = [];
+var img_platform_G = [];
+var img_platform_B = [];
+var img_platform_R = [];
+var img_platform_Gr = [];
 var sound_blop;
 var sound_whip;
 var sound_ting;
@@ -65,7 +70,7 @@ function preload() {
     // IMAGES
     /// BACKGROUNDS
     for (var i = 0; i <= 4; i++) {
-        img_BG[i] = loadImage("images/BG_" + i + ".png");
+        img_BG[i] = loadImage("images/BG/" + i + ".png");
     }
     /// PLAYER
     img_player_R[0] = loadImage("images/player/R/ST.png");
@@ -81,30 +86,37 @@ function preload() {
     cur_img_player = img_player_R[0];
     /// BUBBLES
     for (var i = 0; i < 5; i++) {
-        img_bubbles[i] = loadImage("images/bubble" + i + ".png");
+        img_bubbles[i] = loadImage("images/bubble/" + i + ".png");
+    }
+    //PLATFORMS
+    for (var i = 0; i < 6; i++) {
+        img_platform_G[i] = loadImage("images/platform/G/" + i + ".png");
+        img_platform_B[i] = loadImage("images/platform/B/" + i + ".png");
+        img_platform_R[i] = loadImage("images/platform/R/" + i + ".png");
+        img_platform_Gr[i] = loadImage("images/platform/Gr/" + i + ".png");
     }
     /// EXPLOSION
     for (var i = 0; i < 5; i++) {
-        img_explosion[i] = loadImage("images/explosion" + i + ".png");
+        img_explosion[i] = loadImage("images/explosion/" + i + ".png");
     }
     /// ROPES
-    img_point = loadImage("images/point.png");
+    img_point = loadImage("images/rope/point.png");
     for (var i = 0; i < 4; i++) {
-        img_rope[i] = loadImage("images/rope" + i + ".png");
+        img_rope[i] = loadImage("images/rope/" + i + ".png");
     }
     for (var i = 0; i < 4; i++) {
-        img_metal_rope[i] = loadImage("images/metal_rope" + i + ".png");
+        img_metal_rope[i] = loadImage("images/metal_rope/" + i + ".png");
     }
     /// BONUS
-    img_bonus_plus_1 = loadImage("images/bonus_plus_1.png");
-    img_bonus_minus_1 = loadImage("images/bonus_minus_1.png");
-    img_bonus_shield = loadImage("images/bonus_shield.png");
-    img_bonus_metal_ropes = loadImage("images/bonus_metal_ropes.png");
-    img_bonus_bullets = loadImage("images/bonus_bullets.png");
+    img_bonus_plus_1 = loadImage("images/bonus/plus_1.png");
+    img_bonus_minus_1 = loadImage("images/bonus/minus_1.png");
+    img_bonus_shield = loadImage("images/bonus/shield.png");
+    img_bonus_metal_ropes = loadImage("images/bonus/metal_ropes.png");
+    img_bonus_bullets = loadImage("images/bonus/bullets.png");
     /// OTHERS
-    img_lives = loadImage("images/lives.png");
-    img_shield = loadImage("images/shield.png");
-    img_bullet = loadImage("images/bullet.png");
+    img_lives = loadImage("images/others/lives.png");
+    img_shield = loadImage("images/others/shield.png");
+    img_bullet = loadImage("images/others/bullet.png");
     // SOUNDS
     sound_blop = loadSound('sounds/blop.mp3');
     sound_whip = loadSound('sounds/whip.mp3');
@@ -142,22 +154,30 @@ function setup() {
         level += 1;
     }
     BG = level % img_BG.length;
-    nb_bubbles = level + 1;
-    nb_platforms = level + 2;
-    for (var i = 0; i < nb_bubbles; i++) {
-        bubbles.push(new Bubble());
-    }
-        dead = false;
+    dead = false;
     player = new Player();
-
-    for (var i = 0; i < nb_platforms; i++) {
-        platforms.push(new Platform());
+    levels[1] = [1, 0];
+    levels[2] = [2, 1];
+    levels[3] = [2, 2];
+    levels[4] = [4, 0];
+    levels[5] = [3, 3];
+    levels[6] = [4, 0];
+    levels[7] = [4, 4];
+    levels[8] = [6, 0];
+    levels[9] = [6, 2];
+    levels[10] = [10, 10];
+    if (!levels[level]) {
+        nb_bubbles = level + 1;
+        nb_platforms = level + 2;
+        for (var i = 0; i < nb_bubbles; i++) {
+            bubbles.push(new Bubble());
+        }
+        for (var i = 0; i < nb_platforms; i++) {
+            platforms.push(new Platform());
+        }
+    } else {
+        Level(levels[level][0],levels[level][1]);
     }
-    //
-    //
-    //
-    //
-    //
 }
 
 function draw() {
@@ -261,6 +281,7 @@ function draw() {
             // TEST COLLISION BONUS-PLAYER - END
         }
         for (var i = ropes.length - 1; i >= 0; i--) {
+            var rope_tobesplice = false;
             if (frameCount > starting_FC + starting_delay) {
                 ropes[i].update();
             }
@@ -281,16 +302,37 @@ function draw() {
                         sound_blop.play();
                         bubbles.splice(j, 1);
                         if (!metal_ropes_on) {
-                            ropes.splice(i, 1);
+                            rope_tobesplice = true;
                         }
                         score += 100;
                         break;
                     }
                 }
                 // TEST COLLISION ROPES-BUBBLES - END
+                // TEST COLLISION ROPES-PLATFORM - BEGINNING
+                for (var j = platforms.length - 1; j >= 0; j--) {
+                    if (ropes[i].hits_pl(platforms[j])) {
+                        if (platforms[j].hp != 99) {
+                            platforms[j].hp += -1;
+                            score += 50;
+                        }
+                        if (platforms[j].hp <= 0) {
+                            platforms.splice(j, 1);
+                        }
+                        if (!metal_ropes_on) {
+                            rope_tobesplice = true;
+                        }
+                        break;
+                    }
+                }
+                // TEST COLLISION ROPES-PLATFORM - END
+                if (rope_tobesplice) {
+                    ropes.splice(i, 1);
+                }
             }
         }
         for (var i = bullets.length - 1; i >= 0; i--) {
+            var bullet_tobesplice = false;
             if (frameCount > starting_FC + starting_delay) {
                 bullets[i].update();
             }
@@ -310,13 +352,31 @@ function draw() {
                         explosions.push(new Explosion(bubbles[j].size, bubbles[j].pos, frameCount));
                         sound_blop.play();
                         bubbles.splice(j, 1);
-                        bullets.splice(i, 1);
+                        bullet_tobesplice = true;
                         score += 100;
                         break;
                     }
                 }
-                // TEST COLLISION BULLETS-BUBBLES - END
+                // TEST COLLISION BULLETS-PLATFORM - BEGINNING
+                for (var j = platforms.length - 1; j >= 0; j--) {
+                    if (bullets[i].hits_pl(platforms[j])) {
+                        if (platforms[j].hp != 99) {
+                            platforms[j].hp += -1;
+                            score += 50;
+                        }
+                        if (platforms[j].hp <= 0) {
+                            platforms.splice(j, 1);
+                        }
+                        bullet_tobesplice = true;
+                        break;
+                    }
+                }
+                // TEST COLLISION BULLETS-PLATFORM - END
+                if (bullet_tobesplice) {
+                    bullets.splice(i, 1);
+                }
             }
+            // TEST COLLISION BULLETS-BUBBLES - END
         }
         if (bubbles.length == 0) {
             setup()

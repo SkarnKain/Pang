@@ -47,6 +47,14 @@ function Rope(xpos, FC_beginning, type) {
             return false;
         }
     }
+    this.hits_pl = function (platform) {
+        if (this.pos_end.x > platform.pos.x - platform.w / 2 && this.pos_end.x < platform.pos.x + platform.w / 2 && this.pos_end.y < platform.pos.y + platform.h / 2) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     this.offscreen = function () {
         if (this.pos_end.y <= bord_size) {
             this.vel.y = 0;

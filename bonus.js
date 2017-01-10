@@ -33,7 +33,7 @@ function Bonus(pos, type, FC_beginning) {
         push();
         var time_left = this.FC_ending - frameCount;
         var ratio = map(time_left, 0, this.timing, 0, 1);
-        tint(255, 255 * ratio);
+        tint(255, 205 * ratio + 50);
         if (this.type == "plus_one") {
             image(img_bonus_plus_1, this.pos.x, this.pos.y, this.size, this.size);
         }

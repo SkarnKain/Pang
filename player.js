@@ -1,4 +1,6 @@
 function Player(pos) {
+    var max_vel = 7;
+    var move_trigger = 0.25;
     if (pos) {
         this.pos = pos.copy();
     }
@@ -18,7 +20,6 @@ function Player(pos) {
     this.update = function () {
         var strength = 0.1;
         var drag = 0.3;
-        var max_vel = 7;
         var target = mouseX;
         var force = (target - this.pos.x) * strength;
         if (!this.isshooting) {
@@ -37,6 +38,7 @@ function Player(pos) {
         }
     }
     this.render = function () {
+        
         if (this.isshooting || this.bullet_shooting) {
             if (this.orientation == "right") {
                 cur_img_player = img_player_R[1];
@@ -47,19 +49,20 @@ function Player(pos) {
             this.runcd_R = 0;
             this.runcd_L = 0;
         }
-        else if (this.vel.x >= 0 && this.vel.x < 0.5) {
+        else if (this.vel.x >= 0 && this.vel.x < move_trigger) {
             this.orientation = "right";
             cur_img_player = img_player_R[0];
             this.runcd_R = 0;
             this.runcd_L = 0;
         }
-        else if (this.vel.x >= 0.5) {
+        else if (this.vel.x >= move_trigger) {
             this.orientation = "right";
             cur_img_player = img_player_R[2 + floor(this.runcd_R % (img_player_R.length - 2))];
-            this.runcd_R += 1 / 3;
+            this.runcd_R += map(abs(this.vel.x), 0, max_vel, 0.05, 0.25);
+            //this.runcd_R += 1 / 3;
             this.runcd_L = 0;
         }
-        else if (this.vel.x >= -0.5 && this.vel.x < 0) {
+        else if (this.vel.x >= -move_trigger && this.vel.x < 0) {
             this.orientation = "left";
             cur_img_player = img_player_L[0];
             this.runcd_R = 0;
@@ -69,7 +72,7 @@ function Player(pos) {
             this.orientation = "left";
             cur_img_player = img_player_L[2 + floor(this.runcd_L % (img_player_L.length - 2))];
             this.runcd_R = 0;
-            this.runcd_L += 1 / 3;
+            this.runcd_L += map(abs(this.vel.x), 0, max_vel, 0.05, 0.25);;
         }
         image(cur_img_player, this.pos.x, this.pos.y - this.h * 1.73 / 2 + 10, this.w * 6, this.h * 1.7);
         //        push();
