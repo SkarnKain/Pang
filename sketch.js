@@ -75,12 +75,12 @@ function preload() {
     /// PLAYER
     img_player_R[0] = loadImage("images/player/R/ST.png");
     img_player_R[1] = loadImage("images/player/R/SH.png");
-    for (var i = 0; i <= 18; i++) {
+    for (var i = 0; i <= 12; i++) {
         img_player_R[i + 2] = loadImage("images/player/R/RU/" + i + ".png");
     }
     img_player_L[0] = loadImage("images/player/L/ST.png");
     img_player_L[1] = loadImage("images/player/L/SH.png");
-    for (var i = 0; i <= 18; i++) {
+    for (var i = 0; i <= 12; i++) {
         img_player_L[i + 2] = loadImage("images/player/L/RU/" + i + ".png");
     }
     cur_img_player = img_player_R[0];
@@ -101,10 +101,10 @@ function preload() {
     }
     /// ROPES
     img_point = loadImage("images/rope/point.png");
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 12; i++) {
         img_rope[i] = loadImage("images/rope/" + i + ".png");
     }
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 12; i++) {
         img_metal_rope[i] = loadImage("images/metal_rope/" + i + ".png");
     }
     /// BONUS

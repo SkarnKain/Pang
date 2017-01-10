@@ -81,10 +81,7 @@ function Player(pos) {
         //        rect(this.pos.x, this.pos.y - this.h / 2, this.w, this.h); //HIT BOX
         //        pop();
         if (shield_on) {
-            push();
-            tint(255, 130);
             image(img_shield, this.pos.x, this.pos.y - this.h * 1.1 / 2, this.w * 5, this.h * 1.2);
-            pop();
         }
     }
     this.edges = function () {

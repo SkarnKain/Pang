@@ -18,7 +18,7 @@ function Rope(xpos, FC_beginning, type) {
     }
     this.render = function () {
         image(img_point, this.pos_end.x, this.pos_end.y + img_point.height / 2, img_point.width, img_point.height);
-        for (var i = this.pos_start.y; i >= this.pos_end.y + img_point.height; i--) {
+        for (var i = this.pos_start.y; i >= this.pos_end.y + img_point.height; i -= 2) {
             if (metal_ropes_on) {
                 temp_image = img_metal_rope[i % img_rope.length];
             }
