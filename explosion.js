@@ -4,6 +4,9 @@ function Explosion(size, pos, FC_beginning) {
     this.timing = 20;
     this.FC_beginning = FC_beginning;
     this.FC_ending = this.FC_beginning + this.timing;
+    //
+    //
+    //
     this.render = function () {
         push();
         var time_left = this.FC_ending - frameCount;

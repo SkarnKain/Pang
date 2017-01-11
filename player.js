@@ -17,6 +17,9 @@ function Player(pos) {
         this.runcd_L = 0;
         this.orientation = "right";
     }
+    //
+    //
+    //
     this.update = function () {
         var strength = 0.1;
         var drag = 0.3;

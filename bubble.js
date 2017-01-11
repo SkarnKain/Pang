@@ -21,6 +21,9 @@ function Bubble(size, pos, vel, color) {
         this.color = floor(random(0, 5));
         this.angle = random(0, TWO_PI);
     }
+    //
+    //
+    //
     this.update = function () {
         this.vel.x += force.x;
         this.vel.y += force.y;
@@ -57,6 +60,7 @@ function Bubble(size, pos, vel, color) {
         if (this.pos.x + this.size / 2 >= platform.pos.x - platform.w / 2 && this.pos.x - this.size / 2 <= platform.pos.x + platform.w / 2) {
             if (this.pos.y + this.size / 2 >= platform.pos.y - platform.h / 2 && this.pos.y - this.size / 2 <= platform.pos.y + platform.h / 2) {
                 this.vel.y *= -1;
+                this.vel.y -= force.y;
                 var fut_x = this.pos.x + this.vel.x;
                 var fut_y = this.pos.y + this.vel.y;
                 if (fut_x + this.size / 2 >= platform.pos.x - platform.w / 2 && fut_x - this.size / 2 <= platform.pos.x + platform.w / 2) {

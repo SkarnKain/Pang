@@ -13,6 +13,9 @@ function Rope(xpos, FC_beginning, type) {
     }
     this.FC_beginning = FC_beginning;
     this.FC_ending = this.FC_beginning + this.timing;
+    //
+    //
+    //
     this.update = function () {
         this.pos_end.add(this.vel);
     }

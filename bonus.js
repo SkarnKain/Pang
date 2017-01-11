@@ -15,6 +15,9 @@ function Bonus(pos, type, FC_beginning) {
     this.timing = 600;
     this.FC_beginning = FC_beginning;
     this.FC_ending = this.FC_beginning + this.timing;
+    //
+    //
+    //
     this.update = function () {
         this.vel.x += force.x;
         this.vel.y += force.y;

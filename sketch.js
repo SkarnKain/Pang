@@ -6,8 +6,6 @@ var bullets = [];
 var bonuss = [];
 var bonuss_taken = [];
 var explosions = [];
-var nb_bubbles = 0;
-var nb_platforms = 0;
 var max_ropes = 0;
 var level = 0;
 var levels = [];
@@ -141,7 +139,7 @@ function setup() {
         lives = 3;
         previous_score = score;
         score = 0;
-        bonus_lives = [[5000, false], [10000, false], [20000, false]];
+        bonus_lives = [[5000, false], [10000, false], [20000, false], [30000, false], [40000, false], [50000, false]];
     }
     bubbles = [];
     platforms = [];
@@ -149,6 +147,7 @@ function setup() {
     bullets = [];
     bonuss = [];
     bonuss_taken = [];
+    explosions = [];
     max_ropes = 1;
     if (!dead) {
         level += 1;
@@ -156,28 +155,7 @@ function setup() {
     BG = level % img_BG.length;
     dead = false;
     player = new Player();
-    levels[1] = [1, 0];
-    levels[2] = [2, 1];
-    levels[3] = [2, 2];
-    levels[4] = [4, 0];
-    levels[5] = [3, 3];
-    levels[6] = [4, 0];
-    levels[7] = [4, 4];
-    levels[8] = [6, 0];
-    levels[9] = [6, 2];
-    levels[10] = [10, 10];
-    if (!levels[level]) {
-        nb_bubbles = level + 1;
-        nb_platforms = level + 2;
-        for (var i = 0; i < nb_bubbles; i++) {
-            bubbles.push(new Bubble());
-        }
-        for (var i = 0; i < nb_platforms; i++) {
-            platforms.push(new Platform());
-        }
-    } else {
-        Level(levels[level][0],levels[level][1]);
-    }
+    Level_contructor(level);
 }
 
 function draw() {

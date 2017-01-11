@@ -8,6 +8,9 @@ function Bullet(xpos) {
         this.pos_start.add(this.vel);
         this.pos_end.add(this.vel);
     }
+    //
+    //
+    //
     this.render = function () {
         image(img_bullet, this.pos_end.x, this.pos_end.y + img_point.height / 2, img_point.width, img_point.height);
         //        push();
