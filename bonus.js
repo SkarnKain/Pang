@@ -19,8 +19,7 @@ function Bonus(pos, type, FC_beginning) {
     //
     //
     this.update = function () {
-        this.vel.x += force.x;
-        this.vel.y += force.y;
+        this.vel.y += 0.125;
         this.pos.x += this.vel.x;
         this.pos.y += this.vel.y;
     }

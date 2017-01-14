@@ -16,7 +16,7 @@ function Platform(pos, orient, nb_unit, hp) {
     }
     else {
         this.nb_unit = round(random(2, 10));
-        this.orient = random(["H","V"]);
+        this.orient = random(["H", "V"]);
         if (this.orient == "H") {
             this.h = this.unit;
             this.w = this.unit * this.nb_unit;
@@ -49,7 +49,10 @@ function Platform(pos, orient, nb_unit, hp) {
             img_platform = img_platform_Gr;
         }
         if (this.orient == "H") {
-            if (this.nb_unit % 2 == 1) {
+            if (this.nb_unit == 1) {
+                image(img_platform[6], this.pos.x, this.pos.y, this.unit, this.unit);
+            }
+            else if (this.nb_unit % 2 == 1) {
                 var decalunit = (this.nb_unit - 1) / 2;
                 image(img_platform[0], this.pos.x - this.unit * decalunit, this.pos.y, this.unit, this.unit);
                 image(img_platform[2], this.pos.x + this.unit * decalunit, this.pos.y, this.unit, this.unit);

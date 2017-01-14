@@ -87,7 +87,7 @@ function preload() {
         img_bubbles[i] = loadImage("images/bubble/" + i + ".png");
     }
     //PLATFORMS
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 7; i++) {
         img_platform_G[i] = loadImage("images/platform/G/" + i + ".png");
         img_platform_B[i] = loadImage("images/platform/B/" + i + ".png");
         img_platform_R[i] = loadImage("images/platform/R/" + i + ".png");
@@ -128,7 +128,6 @@ function preload() {
 function setup() {
     starting_FC = frameCount;
     starting_delay = 120;
-    gravity = 0.125;
     bonus_SP = 25;
     createCanvas(1200, 750);
     //frameRate(20);
