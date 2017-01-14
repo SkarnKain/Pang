@@ -341,7 +341,33 @@ function Level_contructor(level) {
             bubbles.push(new Bubble(temp_size, temp_pos, temp_vel, temp_color));
         }
         break;
+    case 10:
+        gravity = 0;
+        temp_size = 150;
+        temp_pos = createVector(400, 100);
+        temp_vel = createVector(0, 5);
+        temp_color = floor(random(0, 5));
+        bubbles.push(new Bubble(temp_size, temp_pos, temp_vel, temp_color));
+        temp_pos = createVector(width - 400, 100);
+        temp_vel = createVector(0, 5);
+        bubbles.push(new Bubble(temp_size, temp_pos, temp_vel, temp_color));
+        temp_pos = createVector(100, (height - hud_size) / 2);
+        temp_vel = createVector(5, 0);
+        temp_color = floor(random(0, 5));
+        bubbles.push(new Bubble(temp_size, temp_pos, temp_vel, temp_color));
+        temp_pos = createVector(width - 100, (height - hud_size) / 2);
+        temp_vel = createVector(-5, 0);
+        bubbles.push(new Bubble(temp_size, temp_pos, temp_vel, temp_color));
+        temp_pos = createVector(100, 500);
+        temp_vel = createVector(3, 3);
+        temp_color = floor(random(0, 5));
+        bubbles.push(new Bubble(temp_size, temp_pos, temp_vel, temp_color));
+        temp_pos = createVector(width - 100, 500);
+        temp_vel = createVector(-3, 3);
+        bubbles.push(new Bubble(temp_size, temp_pos, temp_vel, temp_color));
+        break;
     default:
+        gravity = 0.125;
         var nb_bubbles = this.level + 1;
         var nb_platforms = this.level + 2;
         for (var i = 0; i < nb_bubbles; i++) {

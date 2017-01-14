@@ -40,6 +40,8 @@ var sound_dying;
 var sound_minigun_begin;
 var sound_minigun;
 var sound_minigun_end;
+var musics = [];
+var music;
 var bord_size = 25;
 var hud_size = 125;
 var checkbox_hitbox;
@@ -63,6 +65,7 @@ var gameover_begin = false;
 var current_FC;
 var timing_FC;
 var ending_FC;
+var first_launch = true;
 
 function preload() {
     // IMAGES
@@ -123,6 +126,9 @@ function preload() {
     sound_minigun_begin = loadSound('sounds/minigun_begin.wav');
     sound_minigun = loadSound('sounds/minigun.wav');
     sound_minigun_end = loadSound('sounds/minigun_end.wav');
+    for (var i = 0; i < 3; i++) {
+        musics[i] = loadSound('sounds/music' + i + '.mp3');
+    }
 }
 
 function setup() {
@@ -164,6 +170,8 @@ function draw() {
         timing_FC = 300;
         ending_FC = current_FC + timing_FC;
         gameover_begin = false;
+        music.stop();
+        first_launch = true;
     }
     else if (gameover && current_FC < ending_FC) {
         current_FC = frameCount;
@@ -180,6 +188,12 @@ function draw() {
         starting_FC = frameCount;
     }
     else {
+        if (first_launch) {
+            music = musics[floor(random(0, 3))];
+            music.amp(0.5);
+            music.loop();
+            first_launch = false;
+        }
         previous_score = 0;
         image(img_BG[BG], width / 2, height / 2, width, height);
         Hud_draw();
@@ -270,10 +284,19 @@ function draw() {
                 // TEST COLLISION ROPES-BUBBLES - BEGINNING
                 for (var j = bubbles.length - 1; j >= 0; j--) {
                     if (ropes[i].hits(bubbles[j])) {
-                        var temp_vel_b1 = createVector(bubbles[j].vel.x * 1.05, -5);
-                        var temp_vel_b2 = createVector(bubbles[j].vel.x * -1.05, -5);
-                        bubbles.push(new Bubble(bubbles[j].size / 2, bubbles[j].pos, temp_vel_b1, bubbles[j].color));
-                        bubbles.push(new Bubble(bubbles[j].size / 2, bubbles[j].pos, temp_vel_b2, bubbles[j].color));
+                        var temp_size = bubbles[j].size / 2;
+                        if (gravity == 0) {
+                            var temp_vel_y = bubbles[j].vel.y;
+                        }
+                        else {
+                            var temp_vel_y = -gravity * 40;
+                        }
+                        var temp_vel_b1 = createVector(abs(bubbles[j].vel.x) * 1.05, temp_vel_y);
+                        var temp_vel_b2 = createVector(abs(bubbles[j].vel.x) * -1.05, temp_vel_y);
+                        var temp_pos_b1 = createVector(bubbles[j].pos.x + temp_size / 2, bubbles[j].pos.y);
+                        var temp_pos_b2 = createVector(bubbles[j].pos.x - temp_size / 2, bubbles[j].pos.y);
+                        bubbles.push(new Bubble(temp_size, temp_pos_b1, temp_vel_b1, bubbles[j].color));
+                        bubbles.push(new Bubble(temp_size, temp_pos_b2, temp_vel_b2, bubbles[j].color));
                         pushbonus(j);
                         explosions.push(new Explosion(bubbles[j].size, bubbles[j].pos, frameCount));
                         sound_blop.play();
